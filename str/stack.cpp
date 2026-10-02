@@ -19,8 +19,8 @@ void Stack_push_back(Stack& stack, string data) {
     Linked_push_back(stack.list,data);
 }
 
-void Stack_pop(Stack& stack){
-    Linked_pop_back(stack.list);
+string Stack_pop(Stack& stack){
+    return Linked_pop_back(stack.list);
 }
 
 string Stack_read(const Stack& stack){

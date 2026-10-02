@@ -19,8 +19,8 @@ void Queue_push_back(Queue& queue, string data) {
     Linked_push_back(queue.list,data);
 }
 
-void Queue_pop(Queue& queue){
-    Linked_pop_front(queue.list);
+string Queue_pop(Queue& queue){
+    return Linked_pop_front(queue.list);
 }
 
 string Queue_read(const Queue& queue){

@@ -17,7 +17,6 @@ using namespace std;
 enum class Command {
     PRINT,
 
-    // --- ARRAY (M — массив) ---
     MCREATE,
     MPUSH,
     MPUSHIDX,
@@ -27,7 +26,6 @@ enum class Command {
     MLENGTH,
     MREAD,
 
-    // --- ONE-LINKED LIST (F — односвязный список) ---
     FPUSH,
     FPUSHHEAD,
     FPUSHBEFORE,
@@ -41,7 +39,6 @@ enum class Command {
     FREADHT,
     FREADTH,
 
-    // --- LINKED LIST (L — двусвязный список) ---
     LPUSHHEAD,
     LPUSH,
     LPUSHBEFORE,
@@ -55,28 +52,23 @@ enum class Command {
     LREADHT,
     LREADTH,
 
-    // --- STACK (S — стек) ---
     SPUSH,
     SPOP,
     SREAD,
 
-    // --- QUEUE (Q — очередь) ---
     QPUSH,
     QPOP,
     QREAD,
 
-    // --- TREE (T — AVL-дерево) ---
     TINSERT,
-    TFIND,
+    ISMEMBER,
     TDELETE,
     TREAD,
-    TCHECKAVL
 };
 
 map<string, Command> command_map = {
     {"PRINT",Command::PRINT},
 
-    // --- ARRAY ---
     {"MCREATE", Command::MCREATE},
     {"MPUSH", Command::MPUSH},
     {"MPUSHIDX", Command::MPUSHIDX},
@@ -86,7 +78,6 @@ map<string, Command> command_map = {
     {"MLENGTH", Command::MLENGTH},
     {"MREAD", Command::MREAD},
 
-    // --- ONE-LINKED (F) ---
     {"FPUSH", Command::FPUSH},
     {"FPUSHHEAD", Command::FPUSHHEAD},
     {"FPUSHBEFORE", Command::FPUSHBEFORE},
@@ -100,7 +91,6 @@ map<string, Command> command_map = {
     {"FREADHT", Command::FREADHT},
     {"FREADTH", Command::FREADTH},
 
-    // --- LINKED (L) ---
     {"LPUSHHEAD", Command::LPUSHHEAD},
     {"LPUSH", Command::LPUSH},
     {"LPUSHBEFORE", Command::LPUSHBEFORE},
@@ -114,22 +104,18 @@ map<string, Command> command_map = {
     {"LREADHT", Command::LREADHT},
     {"LREADTH", Command::LREADTH},
 
-    // --- STACK (S) ---
     {"SPUSH", Command::SPUSH},
     {"SPOP", Command::SPOP},
     {"SREAD", Command::SREAD},
 
-    // --- QUEUE (Q) ---
     {"QPUSH", Command::QPUSH},
     {"QPOP", Command::QPOP},
     {"QREAD", Command::QREAD},
 
-    // --- TREE (T) ---
     {"TINSERT", Command::TINSERT},
-    {"TFIND", Command::TFIND},
+    {"ISMEMBER", Command::ISMEMBER},
     {"TDELETE", Command::TDELETE},
     {"TREAD", Command::TREAD},
-    {"TCHECKAVL", Command::TCHECKAVL}
 };
 
 
@@ -167,7 +153,7 @@ void write(string filename){
     }
     for (const auto& [datatype,obj] : stacks){
         fout << "Stack ";
-        fout << datatype <<Stack_read(obj) << endl;
+        fout << datatype << Linked_read(obj.list) << endl;
     }
     for (const auto& [datatype,obj] : trees){
         fout << "Tree ";
@@ -247,7 +233,6 @@ void read(string filename){
 
 void make_change(const string& name, const vector<string>& data, Command command) {
     switch (command) {
-        // --- ARRAY ---
         case Command::MCREATE: {
             Array arr = Array_create(10);
             arrays[name] = arr;
@@ -287,7 +272,6 @@ void make_change(const string& name, const vector<string>& data, Command command
             break;
         }
 
-        // --- ONE-LINKED ---
         case Command::FPUSH: {
             for (auto& v : data)
                 OneLinked_push_back(onellists[name], v);
@@ -307,19 +291,27 @@ void make_change(const string& name, const vector<string>& data, Command command
             break;
         }
         case Command::FPOP: {
-            OneLinked_pop_back(onellists[name]);
+            string val = OneLinked_pop_back(onellists[name]);
+            if (!val.empty()) cout << val << endl;
             break;
         }
         case Command::FPOPHEAD:{
-            OneLinked_pop_front(onellists[name]);
+            string val = OneLinked_pop_front(onellists[name]);
+            if (!val.empty()) cout << val << endl;
             break;
         }
         case Command::FPOPAFTER: {
-            OneLinked_pop_after(onellists[name], data[0]);
+            if (!data.empty()) {
+                string val = OneLinked_pop_after(onellists[name], data[0]);
+                if (!val.empty()) cout << val << endl;
+            }
             break;
         }
         case Command::FPOPBEFORE: {
-            OneLinked_pop_before(onellists[name],data[0]);
+            if (!data.empty()) {
+                string val = OneLinked_pop_before(onellists[name], data[0]);
+                if (!val.empty()) cout << val << endl;
+            }
             break;
         }
         case Command::FDELVAL: {
@@ -340,7 +332,6 @@ void make_change(const string& name, const vector<string>& data, Command command
             break;
         }
 
-        // --- LINKED (двусвязный) ---
         case Command::LPUSHHEAD: {
             for (auto& v : data)
                 Linked_push_front(llists[name], v);
@@ -352,19 +343,27 @@ void make_change(const string& name, const vector<string>& data, Command command
             break;
         }
         case Command::LPOPHEAD: {
-            Linked_pop_front(llists[name]);
+            string val = Linked_pop_front(llists[name]);
+            if (!val.empty()) cout << val << endl;
             break;
         }
         case Command::LPOP: {
-            Linked_pop_back(llists[name]);
+            string val = Linked_pop_back(llists[name]);
+            if (!val.empty()) cout << val << endl;
             break;
         }
         case Command::LPOPBEFORE:{
-            Linked_pop_before(llists[name],data[0]);
+            if (!data.empty()) {
+                string val = Linked_pop_before(llists[name], data[0]);
+                if (!val.empty()) cout << val << endl;
+            }
             break;
         }
         case Command::LPOPAFTER:{
-            Linked_pop_after(llists[name],data[0]);
+            if (!data.empty()) {
+                string val = Linked_pop_after(llists[name], data[0]);
+                if (!val.empty()) cout << val << endl;
+            }
             break;
         }
         case Command::LPUSHBEFORE: {
@@ -381,7 +380,7 @@ void make_change(const string& name, const vector<string>& data, Command command
             break;
         }
         case Command::LFINDVAL:{
-            cout << Linked_find(llists[name],data[0]);
+            cout << Linked_find(llists[name],data[0]) << endl;
             break;
         }
         case Command::LREADHT: {
@@ -392,14 +391,14 @@ void make_change(const string& name, const vector<string>& data, Command command
             cout << Linked_read_reverse(llists[name]) << endl;
             break;
         }
-        // --- STACK ---
         case Command::SPUSH: {
             for (auto& v : data)
                 Stack_push_back(stacks[name], v);
             break;
         }
         case Command::SPOP: {
-            Stack_pop(stacks[name]);
+            string val = Stack_pop(stacks[name]);
+            if (!val.empty()) cout << val << endl;
             break;
         }
         case Command::SREAD: {
@@ -407,14 +406,14 @@ void make_change(const string& name, const vector<string>& data, Command command
             break;
         }
 
-        // --- QUEUE ---
         case Command::QPUSH: {
             for (string v : data)
                 Queue_push_back(queues[name], v);
             break;
         }
         case Command::QPOP: {
-            Queue_pop(queues[name]);
+            string val = Queue_pop(queues[name]);
+            if (!val.empty()) cout << val << endl;
             break;
         }
         case Command::QREAD: {
@@ -422,7 +421,6 @@ void make_change(const string& name, const vector<string>& data, Command command
             break;
         }
 
-        // --- TREE ---
         case Command::TINSERT: {
             for (auto& v : data)
                 trees[name].root = Tree_insert(trees[name].root, stoi(v));
@@ -437,8 +435,15 @@ void make_change(const string& name, const vector<string>& data, Command command
             cout << Tree_read(trees[name]) << endl;
             break;
         }
-
-        // --- PRINT ---
+        case Command::ISMEMBER: {
+            if (is_member(trees[name],stoi(data[0]))){
+                cout << "TRUE" << endl;
+            }
+            else{
+                cout << "FALSE" << endl;
+            }
+            break;
+        }
         case Command::PRINT: {
             cout << "=== PRINT ===" << endl;
 
@@ -447,7 +452,10 @@ void make_change(const string& name, const vector<string>& data, Command command
                 break;
             }
             if (onellists.count(name)) {
-                cout << "OneLinkedList " << name << ":" << OneLinked_read(onellists[name]) << endl;
+                cout << "OneLinkedList " << name << " (Head→Tail):" 
+                        << OneLinked_read(onellists[name]) << endl;
+                cout << "OneLinkedList " << name << " (Tail→Head):" 
+                        << OneLinked_read_reverse(onellists[name]) << endl;
                 break;
             }
             if (llists.count(name)) {
@@ -488,6 +496,11 @@ void parsing(string filename,string query){
 
     string command;
     ss >> command;
+    
+    if (!command_map.count(command)){
+        cout << "Неизвестная команда: " << command << endl;
+        return;
+    }
 
     string name;
     ss >> name;
@@ -495,11 +508,6 @@ void parsing(string filename,string query){
     string temp;
     while (ss >> temp) {
         data.push_back(temp);
-    }
-
-    if (!command_map.count(command)){
-        cout << "Неизвестная команда: " << command << endl;
-        return;
     }
 
     make_change(name,data,command_map[command]);
@@ -528,3 +536,4 @@ int main(int argc,char* argv[]) {
         cout << e.what() << endl;
     }
 }
+

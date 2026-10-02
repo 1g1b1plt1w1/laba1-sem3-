@@ -156,6 +156,25 @@ string Tree_read_node(TreeNode* node) {
     return ss.str();
 }
 
+bool is_member(const Tree& tree,int find_data){
+    if (!tree.root){
+        return 0;
+    }
+    TreeNode* temp = tree.root;
+    while(temp && temp -> data != find_data){
+        if (temp -> data > find_data){
+            temp = temp -> left;
+        }
+        else{
+            temp = temp -> right;
+        }
+    }
+    if (!temp){
+        return 0;
+    }
+    return 1;
+}
+
 string Tree_read(const Tree& tree) {
     if (!tree.root) return "";
     return Tree_read_node(tree.root);

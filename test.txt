@@ -1,5 +1,9 @@
-Array asdfsafd
-Array m1 17 1 3
-OneLinkedList asd3 13 10 7
-LinkedList asd3 1 2 9 
+Array myarray 0 40
+Array test 1 2 3
+OneLinkedList myonelist 50
+LinkedList mylist 60 
+Queue myqueue 20 
+Queue test 4 5 6 
+Stack mystack 10 
+Tree mytree 30 
 

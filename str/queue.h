@@ -12,6 +12,6 @@ struct Queue{
 Queue Queue_create();
 void Queue_destroy(Queue& queue);
 void Queue_push_back(Queue& queue, string data);
-void Queue_pop(Queue& queue);
+string Queue_pop(Queue& queue);
 string Queue_read(const Queue& queue);
 #endif
